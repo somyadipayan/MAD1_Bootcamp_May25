@@ -43,3 +43,15 @@ h1 {
     90% { opacity: 1; }
     100% { opacity: 0; display: none; }
 }
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.btn {
+    border-radius: 0.5rem;
+}

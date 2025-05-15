@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center mb-3">
+    <h1 class="text-center">Books</h1>
+    {% if current_user.librarian %}
+    <a href="{{ url_for('create_book') }}" class="btn btn-primary ms-3">Add Book</a>
+    {% endif %}
+</div>
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" placeholder="Search Books..." class="form-control" value="{{ query }}" />
+    </div>
+    <div class="col-md-3">
+        <select name="section_id" class="form-select">
+            <option value="">Filter by Section</option>
+            {% for section in sections %}
+            <option value="{{ section.id }}" {% if section.id==section_id %}selected{% endif %}>{{ section.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="author" class="form-select">
+            <option value="">Filter by Author</option>
+            {% for author in authors %}
+            <option value="{{ author }}" {% if author==author %}selected{% endif %}>{{ author }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-outline-primary w-100">Apply</button>
+    </div>
+    <div class="col-md-1 d-grid">
+        <a href="{{ url_for('list_books') }}" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+<div class="row">
+    {% for book in books %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.name }}</h5>
+                <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                <p class="card-text"><strong>Section:</strong> {{ book.section.name }}</p>
+                <p class="card-text">{{ book.content[:100] }}...</p>
+
+                {% if book.pdf_path %}
+                <a href="{{ url_for('uploads', filename=book.pdf_path) }}" target="_blank"
+                    class="btn btn-sm btn-outline-info me-2">View PDF</a>
+                {% endif %}
+
+                {% if current_user.librarian %}
+                <a href="{{ url_for('edit_book', book_id=book.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form method="POST" action="{{ url_for('delete_book', book_id=book.id) }}" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Delete this book?')">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% if not books %}
+    <div class="text-center text-muted">No books found.</div>
+    {% endif %}
+</div>
+{% endblock %}

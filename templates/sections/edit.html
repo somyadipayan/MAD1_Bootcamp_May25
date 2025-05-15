@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 70vh">
+        <div class="form-card">
+            <h4 class = "mb-3 text-center">Update Section {{section.name}}</h4>
+            <form method="POST" action="{{ url_for('edit_section', section_id=section.id) }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Section Name</label>
+                    <input type="text" value="{{ section.name }}" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea type="text" class="form-control" id="description" name="description" rows="3">{{ section.description }}</textarea>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %} 
